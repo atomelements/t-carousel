@@ -19,7 +19,13 @@
         </style>
         <t-carousel id="carousel" my-swipe="{{carousel}}" start-slide="{{startSlide}}" speed="{{speed}}" auto="{{auto}}" continuous="{{continuous}}" disable-scroll="{{disableScroll}}" no-arrow="{{noArrow}}" stop-propagation="{{stopPropagation}}" selected="{{selected}}" total-slides="{{totalSlides}}">
             <template is="dom-repeat" items="[[data]]">
-                <t-image src="{{item}}" sizing="{{sizing}}" width="{{width}}" height="{{height}}"></t-image>
+                <t-image src="{{item}}" sizing="{{sizing}}" width="{{width}}" loaded="{{imgLoaded}}" height="{{height}}">
+					<template is="dom-if" if="[[!imgLoaded]]">
+			          <div class="layout horizontal center center-justified fit" style="z-index: 1;background: #000;">
+			              <t-loader active></t-loader>
+			          </div>
+			      </template>
+                </t-image>
             </template>
         </t-carousel>
         <div class="fit layout horizontal center center-justified backPage">
