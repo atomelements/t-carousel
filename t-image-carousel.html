@@ -1,0 +1,162 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../t-image/t-image.html" />
+<link rel="import" href="t-carousel.html" />
+<dom-module id="t-image-carousel">
+    <template>
+        <style>
+        :host {
+            display: block;
+            position: relative;
+        }
+        </style>
+        <t-carousel id="mySwipe" start-slide="{{startSlide}}" speed="{{speed}}" auto="{{auto}}" continuous="{{continuous}}" disable-scroll="{{disableScroll}}" no-arrow="{{noArrow}}" stop-propagation="{{stopPropagation}}" selected="{{selected}}" total-slides="{{totalSlides}}">
+            <template is="dom-repeat" items="[[data]]">
+                <t-image src="{{item}}" sizing="{{sizing}}" width="{{width}}" height="{{height}}"></t-image>
+            </template>
+        </t-carousel>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: "t-image-carousel",
+
+    properties: {
+
+        /**
+         * Integer (default:0) - index position Swipe should start at
+         */
+        data: {
+            type: Array,
+            value: []
+        },
+        
+        /**
+         * Sets a sizing option for the image.  Valid values are `contain` (full
+         * aspect ratio of the image is contained within the element and
+         * letterboxed) or `cover` (image is cropped in order to fully cover the
+         * bounds of the element), or `null` (default: image takes natural size).
+         *
+         * @attribute sizing
+         * @type string
+         * @default null
+         */
+        sizing: {
+            type: String,
+            reflectToAttribute: true,
+            value: "cover"
+        },
+
+        /**
+         * Can be used to set the width of image (e.g. via binding); size may also be
+         * set via CSS.
+         *
+         * @attribute width
+         * @type number
+         * @default null
+         */
+        width: {
+            type: Number,
+            value: null
+        },
+
+        /**
+         * Can be used to set the height of image (e.g. via binding); size may also be
+         * set via CSS.
+         *
+         * @attribute height
+         * @type number
+         * @default null
+         */
+        height: {
+            type: Number,
+            value: null
+        },
+        /**
+         * Integer (default:0) - index position Swipe should start at
+         */
+        startSlide: {
+            type: Number,
+            value: 0
+        },
+
+        /**
+         * Integer (default:300) - speed of prev and next transitions in milliseconds.
+         */
+        speed: {
+            type: Number,
+            value: 300
+        },
+
+        /**
+         * Integer - begin with auto slideshow (time in milliseconds between slides)
+         */
+        auto: {
+            type: Number,
+            value: 10000
+        },
+
+        /**
+         * Boolean (default:true) - create an infinite feel with no endpoints
+         */
+        continuous: {
+            type: Boolean,
+            value: true
+        },
+
+        /**
+         * Boolean (default:false) - stop any touches on this container from scrolling the page
+         */
+        disableScroll: {
+            type: Boolean,
+            value: false
+        },
+
+        /**
+         * Boolean (default:false) - remove arrow from the slide
+         */
+        noArrow: {
+            type: Boolean,
+            value: false
+        },
+
+        /**
+         * Boolean (default:false) - stop event propagation
+         */
+        stopPropagation: {
+            type: Boolean,
+            value: false
+        },
+
+        selected: {
+            type: Number,
+            notify: true
+        },
+
+        totalSlides: {
+            type: Number,
+            notify: true
+        }
+    },
+
+    /**
+     * Function - slide to prev
+     */
+    prev: function() {
+        this.$.mySwipe.prev()
+    },
+
+    /**
+     * Function - slide to next
+     */
+    next: function() {
+        this.$.mySwipe.next()
+    },
+
+    /**
+     * Function slide to set index position (duration: speed of transition in milliseconds)
+     */
+    slide: function(index, duration) {
+        this.$.mySwipe.slide(index, duration);
+    }
+});
+</script>

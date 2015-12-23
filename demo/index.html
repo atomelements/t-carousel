@@ -8,10 +8,32 @@
   <title>t-carousel demo</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../t-image-carousel.html">
   <link rel="import" href="../t-carousel.html">
 </head>
 <body>
-    <t-carousel></t-carousel>
+<style>
+	.div{
+		background: #000;
+		color: #fff;
+		width: 100%;
+		height: 300px;
+	}
+	t-button{
+		background: #000;
+	}
+</style>
+    <t-carousel>
+		 <div class="div">111111111111111111111111111</div>
+		 <div class="div">222222222222222222222222222</div>
+		 <div class="div">322222222222222222222222222222222222222222222222222222222</div>
+    </t-carousel>
+    <t-image-carousel height="300"></t-image-carousel>
+
+    <script>
+    var Arr= ['http://lorempixel.com/600/400','http://lorempixel.com/600/400','http://lorempixel.com/600/400'];
+    document.querySelector('t-image-carousel').data = Arr;
+    </script>
 </body>
 </html>
 
