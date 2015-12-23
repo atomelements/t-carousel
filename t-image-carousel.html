@@ -8,12 +8,23 @@
             display: block;
             position: relative;
         }
+        .backPage{
+			font-size: 14px;
+			z-index: -1;
+			background: #000;
+			color: #fff;
+			text-align: center;
+			padding: 10px;
+        }
         </style>
-        <t-carousel id="mySwipe" start-slide="{{startSlide}}" speed="{{speed}}" auto="{{auto}}" continuous="{{continuous}}" disable-scroll="{{disableScroll}}" no-arrow="{{noArrow}}" stop-propagation="{{stopPropagation}}" selected="{{selected}}" total-slides="{{totalSlides}}">
+        <t-carousel id="carousel" my-swipe="{{carousel}}" start-slide="{{startSlide}}" speed="{{speed}}" auto="{{auto}}" continuous="{{continuous}}" disable-scroll="{{disableScroll}}" no-arrow="{{noArrow}}" stop-propagation="{{stopPropagation}}" selected="{{selected}}" total-slides="{{totalSlides}}">
             <template is="dom-repeat" items="[[data]]">
                 <t-image src="{{item}}" sizing="{{sizing}}" width="{{width}}" height="{{height}}"></t-image>
             </template>
         </t-carousel>
+        <div class="fit layout horizontal center center-justified backPage">
+        	<span>Thats it!! Please go back</span>
+        </div>
     </template>
 </dom-module>
 <script>
@@ -27,9 +38,10 @@ Polymer({
          */
         data: {
             type: Array,
-            value: []
+            value: [],
+            observer:'runSetUp'
         },
-        
+
         /**
          * Sets a sizing option for the image.  Valid values are `contain` (full
          * aspect ratio of the image is contained within the element and
@@ -46,6 +58,13 @@ Polymer({
             value: "cover"
         },
 
+        carousel: {
+            type: Object,
+            value: function () {
+                return null;
+            },
+            notify: true
+        },
         /**
          * Can be used to set the width of image (e.g. via binding); size may also be
          * set via CSS.
@@ -142,21 +161,32 @@ Polymer({
      * Function - slide to prev
      */
     prev: function() {
-        this.$.mySwipe.prev()
+        this.$.carousel.prev()
     },
 
     /**
      * Function - slide to next
      */
     next: function() {
-        this.$.mySwipe.next()
+        this.$.carousel.next();
+
+    }, 
+
+    /**
+     * Function - slide to next
+     */
+    runSetUp: function() {
+    	var comp = this;
+    	setTimeout(function(){
+        	comp.$.carousel.mySwipe.setup();
+    	},100);
     },
 
     /**
      * Function slide to set index position (duration: speed of transition in milliseconds)
      */
     slide: function(index, duration) {
-        this.$.mySwipe.slide(index, duration);
+        this.$.carousel.slide(index, duration);
     }
 });
 </script>

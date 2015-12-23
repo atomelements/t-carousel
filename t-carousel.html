@@ -21,7 +21,6 @@
 	  position: relative;
 	}
 	.swipe-wrap ::content > * {
-	  float:left;
 	  width:100%;
 	  position: relative;
 	}
@@ -42,7 +41,7 @@
 	}
 </style>
 	<div id='mySwipe' class='swipe'>
-      <div class='swipe-wrap'>
+      <div class='layout horizontal swipe-wrap'>
       	<content select="*"></content>
       </div>
     </div>
@@ -59,138 +58,138 @@
 </dom-module>
 
 <script>
-	Polymer({
-		is: "t-carousel",
+    Polymer({
+        is: "t-carousel",
 
-		properties:{
+        properties: {
 
-			/**
+            /**
 	         * Integer (default:0) - index position Swipe should start at
 	         */
-			startSlide: {
-				type:Number,
-				value:0
-			},
+            startSlide: {
+                type: Number,
+                value: 0
+            },
 
-			/**
+            /**
 	         * Integer (default:300) - speed of prev and next transitions in milliseconds.
 	         */
-			speed: {
-				type:Number,
-				value:300
-			},
+            speed: {
+                type: Number,
+                value: 300
+            },
 
-			/**
+            /**
 	         * Integer - begin with auto slideshow (time in milliseconds between slides)
 	         */
-			auto: {
-				type:Number,
-				value:10000
-			},
+            auto: {
+                type: Number,
+                value: 10000
+            },
 
-			/**
+            /**
 	         * Boolean (default:true) - create an infinite feel with no endpoints
 	         */
-			continuous: {
-				type:Boolean,
-				value:true
-			},
+            continuous: {
+                type: Boolean,
+                value: true
+            },
 
-			/**
+            /**
 	         * Boolean (default:false) - stop any touches on this container from scrolling the page
 	         */
-			disableScroll: {
-				type:Boolean,
-				value:false
-			},
+            disableScroll: {
+                type: Boolean,
+                value: false
+            },
 
-			/**
+            /**
 	         * Boolean (default:false) - remove arrow from the slide
 	         */
-			noArrow: {
-				type:Boolean,
-				value:false
-			},
+            noArrow: {
+                type: Boolean,
+                value: false
+            },
 
-			/**
+            /**
 	         * Boolean (default:false) - stop event propagation
 	         */
-			stopPropagation: {
-				type:Boolean,
-				value:false
-			},
+            stopPropagation: {
+                type: Boolean,
+                value: false
+            },
 
-			mySwipe:{
-	            type: Object,
-	            value: function() {
-	                return null;
-	            },
-	            notify: true
-        	},
+            mySwipe: {
+                type: Object,
+                value: function () {
+                    return null;
+                },
+                notify: true
+            },
 
-        	selected:{
-        		type:Number,
-	            notify: true
-        	},
+            selected: {
+                type: Number,
+                notify: true
+            },
 
-        	totalSlides:{
-        		type:Number,
-	            notify: true
-        	}
-		},
+            totalSlides: {
+                type: Number,
+                notify: true
+            }
+        },
 
-		attached:function(){
-			var component = this;
-			this.selected = this.startSlide;
-			this.mySwipe = new Swipe(component.$.mySwipe, {
-			  startSlide: this.startSlide,
-			  speed: this.speed,
-			  auto: this.auto,
-			  continuous: this.continuous,
-			  disableScroll: this.disableScroll,
-			  stopPropagation: this.stopPropagation,
-			  callback: function(index, elem) {
+        attached: function () {
+            var component = this;
+            this.selected = this.startSlide;
+            this.mySwipe = new Swipe(component.$.mySwipe, {
+                startSlide: this.startSlide,
+                speed: this.speed,
+                auto: this.auto,
+                continuous: this.continuous,
+                disableScroll: this.disableScroll,
+                stopPropagation: this.stopPropagation,
+                callback: function (index, elem) {
 
-			  	/**
-		         * Function - runs at slide change.
-		         */
-			  	component.fire('slide-change','index','elem');
-			  	component._setSelected();
-			  },
-			  transitionEnd: function(index, elem) {
+                    /**
+                     * Function - runs at slide change.
+                     */
+                    component.fire('slide-change', 'index', 'elem');
+                    component._setSelected();
+                },
+                transitionEnd: function (index, elem) {
 
-			  	/**
-		         * Function - runs at the end slide transition.
-		         */
-			  	component.fire('slide-finish','index','elem');
-			  }
-			});
+                    /**
+                     * Function - runs at the end slide transition.
+                     */
+                    component.fire('slide-finish', 'index', 'elem');
+                }
+            });
 
-			this.totalSlides = this.mySwipe.getNumSlides();
-		},
+            this.totalSlides = this.mySwipe.getNumSlides();
+        },
 
-		_setSelected:function(){
-			this.selected = this.mySwipe.getPos();
-		},
-		/**
+        _setSelected: function () {
+            this.selected = this.mySwipe.getPos();
+        },
+        /**
          * Function - slide to prev
          */
-		prev:function(){
-			this.mySwipe.prev()
-		},
+        prev: function () {
+            this.mySwipe.prev()
+        },
 
-		/**
+        /**
          * Function - slide to next
          */
-		next:function(){
-			this.mySwipe.next()
-		},
-	
-		/**
+        next: function () {
+            this.mySwipe.next()
+        },
+
+        /**
          * Function slide to set index position (duration: speed of transition in milliseconds)
          */
-		slide:function(index, duration){
-			this.mySwipe.slide(index, duration);
-		}			
-	});	
+        slide: function (index, duration) {
+            this.mySwipe.slide(index, duration);
+        }
+    });
 </script>
