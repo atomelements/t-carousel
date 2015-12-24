@@ -17,8 +17,30 @@
         #backPage {
             z-index: -1;
         }
+        :host[zoomed] {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            height: 100%;
+            width: 100%;
+            background: rgba(0,0,0,0.8);
+        }
+        :host[zoomed] t-carousel{
+            background: transparent;
+        }
+        :host[zoomed] #backPage{
+           position: absolute;
+           top: 50%;
+           width: 100%;
+           z-index: 98;
+           -webkit-transform: translateY(-50%);
+           -ms-transform: translateY(-50%);
+           -o-transform: translateY(-50%);
+           transform: translateY(-50%);
+        }
         </style>
-        <t-carousel id="carousel" my-swipe="{{carousel}}" start-slide="{{startSlide}}" speed="{{speed}}" auto="{{auto}}" continuous="{{continuous}}" disable-scroll="{{disableScroll}}" no-arrow="{{noArrow}}" stop-propagation="{{stopPropagation}}" selected="{{selected}}">
+        <t-carousel id="carousel" my-swipe="{{carousel}}" start-slide="{{startSlide}}" speed="{{speed}}" auto="{{auto}}" continuous="{{continuous}}" disable-scroll="{{disableScroll}}" no-arrow="{{noArrow}}" stop-propagation="{{stopPropagation}}" selected="{{selected}}" light-box="{{lightBox}}" zoomed="{{zoomed}}">
             <template is="dom-repeat" items="[[imgArray]]">
                 <t-image src="{{item}}" sizing="{{sizing}}" width="{{width}}" loaded="{{imgLoaded}}" height="{{height}}">
                     <template is="dom-if" if="[[!imgLoaded]]">
@@ -29,7 +51,7 @@
                 </t-image>
             </template>
         </t-carousel>
-        <div id="backPage" class="fit " style$="background:url({{lastitem}}); background-size:{{sizing}}">
+        <div id="backPage" class="fit " style$="background:url({{lastitem}}); background-size:{{sizing}};height:{{height}}px">
         </div>
     </template>
 </dom-module>
@@ -133,6 +155,24 @@ Polymer({
         continuous: {
             type: Boolean,
             value: true
+        },
+
+        /**
+         * Boolean to handle styles
+         */
+        zoomed: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute:true,
+            notify:true
+        },
+
+        /**
+         * Boolean (default:true) - create an infinite feel with no endpoints
+         */
+        lightBox: {
+            type: Boolean,
+            value: false
         },
 
         /**

@@ -7,10 +7,29 @@
 
 <template>
 <style>
-:host{
+	:host{
 		display: block;
 		position: relative;
 	}
+	:host[zoomed]{
+	    position: fixed;
+	    top: 0;
+	    left: 0;
+	    z-index: 99;
+	    height: 100%;
+	    width: 100%;
+	    background: rgba(0,0,0,0.5);
+	}
+	:host[zoomed] .container{
+	   position: absolute;
+	   top: 50%;
+	   width: 100%;
+	   -webkit-transform: translateY(-50%);
+	   -ms-transform: translateY(-50%);
+	   -o-transform: translateY(-50%);
+	   transform: translateY(-50%);
+	}
+
 	.swipe {
 	  overflow: hidden;
 	  visibility: hidden;
@@ -26,12 +45,18 @@
 	}
 	.arrow{
 		position: absolute;
-		width: 100%;
 		top: 50%;
 		-webkit-transform: translate(0, -50%);
 		-ms-transform: translate(0, -50%);
 		-o-transform: translate(0, -50%);
 		transform: translate(0, -50%);
+		z-index: 99;
+	}
+	.arrow.left{
+		left: 0;
+	}
+	.arrow.right{
+		right: 0;
 	}
 	t-button[only-icon],
 	.pagination{
@@ -48,10 +73,13 @@
 	    border-radius: 4px;
 	    font-weight: 100;
 	    font-size: var(--font-12,12px);
+	    z-index: 99;
 	}
 </style>
-	<div id="mySwipe" class="swipe">
-      <div class="layout horizontal swipe-wrap">
+<div class="container">
+	
+	<div id="mySwipe" class="swipe" >
+      <div class="layout horizontal swipe-wrap" on-click='_checkLightBox'>
       	<content select="*"></content>
       </div>
     </div>
@@ -61,12 +89,11 @@
 		</div>
 	</template>
 	<template is="dom-if" if="[[!noArrow]]">
-		<div class="layout horizontal arrow">
-	      <t-button only-icon ico="icons:chevron-left" on-click="prev">prev</t-button>
-	      <span class="flex"></span>
-	      <t-button only-icon ico="icons:chevron-right" on-click="next">next</t-button>
-		</div>
+	      <t-button class="arrow left" only-icon ico="icons:chevron-left" on-click="prev">prev</t-button>
+	      
+	      <t-button class="arrow right" only-icon ico="icons:chevron-right" on-click="next">next</t-button>
 	</template>
+</div>
 
 
 </template>
@@ -100,6 +127,24 @@
             auto: {
                 type: Number,
                 value: 10000
+            },
+
+            /**
+	         * Boolean to turn on the zoom
+	         */
+            lightBox: {
+                type: Boolean,
+                value: false
+            },
+
+            /**
+	         * Boolean to turn on the zoom
+	         */
+            zoomed: {
+                type: Boolean,
+                value: false,
+                reflectToAttribute:true,
+                notify: true
             },
 
             /**
@@ -189,6 +234,13 @@
             });
 
             this.totalSlides = this.mySwipe.getNumSlides();
+        },
+
+        _checkLightBox:function(){
+        	if(this.lightBox){
+        		this.zoomed = !this.zoomed;
+        		this.mySwipe.setup();
+        	}
         },
 
         _getSelected: function (selected) {
