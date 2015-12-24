@@ -33,18 +33,33 @@
 		-o-transform: translate(0, -50%);
 		transform: translate(0, -50%);
 	}
-	t-button[only-icon]{
+	t-button[only-icon],
+	.pagination{
 		background: rgba(0,0,0,0.5);
 	}
-	t-button ::content iron-icon{
+	t-button ::content iron-icon,.pagination{
 		color: var(--grey-two,#bbbbbb);
 	}
+	.pagination{
+		position: absolute;
+	    right: 10px;
+	    bottom: 10px;
+	    padding: 5px 10px;
+	    border-radius: 4px;
+	    font-weight: 100;
+	    font-size: var(--font-12,12px);
+	}
 </style>
-	<div id='mySwipe' class='swipe'>
-      <div class='layout horizontal swipe-wrap'>
+	<div id="mySwipe" class="swipe">
+      <div class="layout horizontal swipe-wrap">
       	<content select="*"></content>
       </div>
     </div>
+    <template is="dom-if" if="[[!noPagination]]">
+		<div class="pagination">
+	      	<span>{{_getSelected(selected)}}</span>&nbsp;/&nbsp;<span>{{totalSlides}}</span>
+		</div>
+	</template>
 	<template is="dom-if" if="[[!noArrow]]">
 		<div class="layout horizontal arrow">
 	      <t-button only-icon ico="icons:chevron-left" on-click="prev">prev</t-button>
@@ -112,6 +127,14 @@
             },
 
             /**
+	         * Boolean (default:false) - remove arrow from the slide
+	         */
+            noPagination: {
+                type: Boolean,
+                value: false
+            },
+
+            /**
 	         * Boolean (default:false) - stop event propagation
 	         */
             stopPropagation: {
@@ -166,6 +189,10 @@
             });
 
             this.totalSlides = this.mySwipe.getNumSlides();
+        },
+
+        _getSelected: function (selected) {
+            return selected + 1;
         },
 
         _setSelected: function () {

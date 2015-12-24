@@ -8,28 +8,28 @@
             display: block;
             position: relative;
         }
-        .backPage{
-			font-size: 14px;
-			z-index: -1;
-			background: #000;
-			color: #fff;
-			text-align: center;
-			padding: 10px;
+        
+        /* t-image,
+        #backPage {
+            background-color: #000;
+        } */
+        
+        #backPage {
+            z-index: -1;
         }
         </style>
-        <t-carousel id="carousel" my-swipe="{{carousel}}" start-slide="{{startSlide}}" speed="{{speed}}" auto="{{auto}}" continuous="{{continuous}}" disable-scroll="{{disableScroll}}" no-arrow="{{noArrow}}" stop-propagation="{{stopPropagation}}" selected="{{selected}}" total-slides="{{totalSlides}}">
-            <template is="dom-repeat" items="[[data]]">
+        <t-carousel id="carousel" my-swipe="{{carousel}}" start-slide="{{startSlide}}" speed="{{speed}}" auto="{{auto}}" continuous="{{continuous}}" disable-scroll="{{disableScroll}}" no-arrow="{{noArrow}}" stop-propagation="{{stopPropagation}}" selected="{{selected}}">
+            <template is="dom-repeat" items="[[imgArray]]">
                 <t-image src="{{item}}" sizing="{{sizing}}" width="{{width}}" loaded="{{imgLoaded}}" height="{{height}}">
-					<template is="dom-if" if="[[!imgLoaded]]">
-			          <div class="layout horizontal center center-justified fit" style="z-index: 1;background: #000;">
-			              <t-loader active></t-loader>
-			          </div>
-			      </template>
+                    <template is="dom-if" if="[[!imgLoaded]]">
+                        <div class="layout horizontal center center-justified fit" style="z-index: 1;background: #000;">
+                            <t-loader active></t-loader>
+                        </div>
+                    </template>
                 </t-image>
             </template>
         </t-carousel>
-        <div class="fit layout horizontal center center-justified backPage">
-        	<span>Thats it!! Please go back</span>
+        <div id="backPage" class="fit " style$="background:url({{lastitem}}); background-size:{{sizing}}">
         </div>
     </template>
 </dom-module>
@@ -39,13 +39,20 @@ Polymer({
 
     properties: {
 
+
+        imgArray: {
+            type: Array,
+            value: [],
+            observer: 'runSetUp'
+        },
+
         /**
          * Integer (default:0) - index position Swipe should start at
          */
         data: {
             type: Array,
             value: [],
-            observer:'runSetUp'
+            observer: '_createData'
         },
 
         /**
@@ -66,7 +73,7 @@ Polymer({
 
         carousel: {
             type: Object,
-            value: function () {
+            value: function() {
                 return null;
             },
             notify: true
@@ -163,6 +170,14 @@ Polymer({
         }
     },
 
+    _createData: function() {
+        if (this.data.length > 0) {
+            var arr = this.data.slice();
+            this.lastitem = arr.pop();
+            this.imgArray = arr;
+        }
+    },
+
     /**
      * Function - slide to prev
      */
@@ -176,16 +191,17 @@ Polymer({
     next: function() {
         this.$.carousel.next();
 
-    }, 
+    },
 
     /**
      * Function - slide to next
      */
     runSetUp: function() {
-    	var comp = this;
-    	setTimeout(function(){
-        	comp.$.carousel.mySwipe.setup();
-    	},100);
+        var comp = this;
+        setTimeout(function() {
+            comp.$.carousel.mySwipe.setup();
+            comp.$.carousel.totalSlides = comp.$.carousel.mySwipe.getNumSlides();
+        }, 100);
     },
 
     /**
