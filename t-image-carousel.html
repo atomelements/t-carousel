@@ -72,8 +72,10 @@ Polymer({
 
         imgArray: {
             type: Array,
-            value: [],
-            observer: 'runSetUp'
+            value:function() {
+                return [];
+            },
+            notify: true
         },
 
         /**
@@ -81,8 +83,10 @@ Polymer({
          */
         data: {
             type: Array,
-            value: [],
-            observer: '_createData'
+            value:function() {
+                return [];
+            },
+            notify: true
         },
 
         /**
@@ -217,9 +221,15 @@ Polymer({
             notify: true
         }
     },
+    observers: [
+    'runSetUp(imgArray)',
+    '_createData(data)'
 
+    ],
     _createData: function() {
+            alert(this.data.length +'before');
         if (this.data.length > 0) {
+            alert(this.data.length);
             var arr = this.data.slice();
             this.lastitem = arr.pop();
             this.imgArray = arr;
