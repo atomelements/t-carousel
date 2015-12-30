@@ -88,22 +88,24 @@
 	
 	<div id="mySwipe" class="swipe" >
       <div class="layout horizontal swipe-wrap" on-click='_checkLightBox'>
-      	<content select="*"></content>
+      	<content id="something" select="*"></content>
       </div>
     </div>
-    <template is="dom-if" if="[[!noPagination]]">
-		<div class="pagination">
-	      	<span>{{_getSelected(selected)}}</span>&nbsp;/&nbsp;<span>{{totalSlides}}</span>
-		</div>
-	</template>
-	<template is="dom-if" if="[[!noArrow]]">
-	      <t-button class="arrow left" only-icon ico="icons:chevron-left" on-click="prev">prev</t-button>
-	      
-	      <t-button class="arrow right" only-icon ico="icons:chevron-right" on-click="next">next</t-button>
-	</template>
+    <template is="dom-if" if="{{checkDistributedNodes(totalSlides)}}">
+        <template is="dom-if" if="[[!noPagination]]">
+    		<div class="pagination">
+    	      	<span>{{_getSelected(selected)}}</span>&nbsp;/&nbsp;<span>{{totalSlides}}</span>
+    		</div>
+    	</template>
+    	<template is="dom-if" if="[[!noArrow]]">
+    	      <t-button class="arrow left" only-icon ico="icons:chevron-left" on-click="prev">prev</t-button>
+    	      
+    	      <t-button class="arrow right" only-icon ico="icons:chevron-right" on-click="next">next</t-button>
+    	</template>
+    </template>
 </div>
 <div id="backoverlay" class="fit " on-click='_checkLightBox'>
-        </div>
+</div>
 
 </template>
 </dom-module>
@@ -215,7 +217,12 @@
             }
         },
 
+        checkDistributedNodes: function(totalSlides){
+            return Polymer.dom(this.$.something).getDistributedNodes().length > 1;
+        },
+
         attached: function () {
+            console.log();
             var component = this;
             this.selected = this.startSlide;
             this.mySwipe = new Swipe(component.$.mySwipe, {

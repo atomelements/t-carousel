@@ -260,6 +260,7 @@ Polymer({
         setTimeout(function() {
             comp.$.carousel.mySwipe.setup();
             comp.$.carousel.totalSlides = comp.$.carousel.mySwipe.getNumSlides();
+            comp.$.carousel.checkDistributedNodes();
         }, 100);
     },
 
