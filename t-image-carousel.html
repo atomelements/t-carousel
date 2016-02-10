@@ -8,22 +8,25 @@
             display: block;
             position: relative;
         }
-        
         /* t-image,
         #backPage {
             background-color: #000;
         } */
-        #backoverlay{
+        
+        #backoverlay {
             display: none;
         }
-        :host[zoomed] #backoverlay{
+        
+        :host[zoomed] #backoverlay {
             display: block;
-            z-index:97;
-            background: rgba(0,0,0,0.8);
+            z-index: 97;
+            background: rgba(0, 0, 0, 0.8);
         }
+        
         #backPage {
             z-index: -1;
         }
+        
         :host[zoomed] {
             position: fixed;
             top: 0;
@@ -32,34 +35,34 @@
             height: 100%;
             width: 100%;
         }
-        :host[zoomed] t-carousel,:host[zoomed] t-carousel ::content #backoverlay{
+        
+        :host[zoomed] t-carousel,
+        :host[zoomed] t-carousel::content #backoverlay {
             background: transparent;
         }
         
-        :host[zoomed] #backPage{
-           position: absolute;
-           top: 50%;
-           width: 100%;
-           z-index: 98;
-           -webkit-transform: translateY(-50%);
-           -ms-transform: translateY(-50%);
-           -o-transform: translateY(-50%);
-           transform: translateY(-50%);
+        :host[zoomed] #backPage {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            z-index: 98;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            -o-transform: translateY(-50%);
+            transform: translateY(-50%);
         }
         </style>
         <t-carousel id="carousel" my-swipe="{{carousel}}" start-slide="{{startSlide}}" speed="{{speed}}" auto="{{auto}}" continuous="{{continuous}}" disable-scroll="{{disableScroll}}" no-arrow="{{noArrow}}" stop-propagation="{{stopPropagation}}" selected="{{selected}}" light-box="{{lightBox}}" zoomed="{{zoomed}}">
-            <template is="dom-repeat" items="[[imgArray]]">
-                <t-image src="{{item}}" sizing="{{sizing}}" width="{{width}}" loaded="{{imgLoaded}}" height="{{height}}">
-                    <template is="dom-if" if="[[!imgLoaded]]">
-                        <div class="layout horizontal center center-justified fit" style="z-index: 1;background: #000;">
-                            <t-loader active></t-loader>
-                        </div>
-                    </template>
-                </t-image>
-            </template>
+            <!-- <template is="dom-repeat" items="[[data]]">
+               <t-image src="{{item}}" sizing="{{sizing}}" width="{{width}}" loaded="{{imgLoaded}}" height="{{height}}">
+                   <template is="dom-if" if="[[!imgLoaded]]">
+                       <div class="layout horizontal center center-justified fit" style="z-index: 1;background: #000;">
+                           <t-loader active></t-loader>
+                       </div>
+                   </template>
+               </t-image>
+           </template> -->
         </t-carousel>
-        <div id="backPage" class="fit " style$="background:url({{lastitem}}); background-size:{{sizing}};height:{{height}}px">
-        </div>
         <div id="backoverlay" class="fit" on-click="_closeZoom" style="">
     </template>
 </dom-module>
@@ -70,20 +73,9 @@ Polymer({
     properties: {
 
 
-        imgArray: {
-            type: Array,
-            value:function() {
-                return [];
-            },
-            notify: true
-        },
-
-        /**
-         * Integer (default:0) - index position Swipe should start at
-         */
         data: {
             type: Array,
-            value:function() {
+            value: function() {
                 return [];
             },
             notify: true
@@ -175,8 +167,8 @@ Polymer({
         zoomed: {
             type: Boolean,
             value: false,
-            reflectToAttribute:true,
-            notify:true
+            reflectToAttribute: true,
+            notify: true
         },
 
         /**
@@ -222,21 +214,59 @@ Polymer({
         }
     },
     observers: [
-    'runSetUp(imgArray)',
-    '_createData(data)'
+        'runSetUp(data)'
 
     ],
-    _createData: function() {
+    listeners: {
+        'slide-change': '_setSrcOnChange'
+    },
+
+    /*_createData: function() {
         if (this.data.length > 0) {
             var arr = this.data.slice();
             this.lastitem = arr.pop();
-            this.imgArray = arr;
+            this.data =  this.data;
+        }
+    },*/
+
+    _closeZoom: function() {
+        this.$.carousel._checkLightBox();
+    },
+
+    _setSrc: function() {
+        this._imgItems = Polymer.dom(this.$.carousel).querySelectorAll('t-image');
+        //for  the current slide 
+        var startIndex=this.startSlide, lstImgIndex=this.data.length-1;
+        this._loadImg(startIndex);
+        //for 1 minus the current one considering he can come back
+        if (startIndex ==0 ) {
+            this._loadImg(lstImgIndex);
+        }else{
+            this._loadImg(startIndex - 1);
+        }
+        //for 1 plus the current one considering he can go forward
+        if(startIndex == lstImgIndex){
+            this._loadImg(0);
+        }else{
+            this._loadImg(startIndex + 1);
         }
     },
 
-    _closeZoom: function(){
-        this.$.carousel._checkLightBox();
+    _setSrcOnChange: function(element, index) {
+        nextSlideIndex = index + 1 > this.data.length - 1 ? 0 : (index + 1),
+        previousSlideIndex = index - 1 < 0 ? this.data.length - 1 : index - 1;
+        if( this._imgItems[nextSlideIndex].src.length <= 0){
+            this._loadImg(nextSlideIndex);
+        }
+        if ( this._imgItems[previousSlideIndex].src.length <= 0) {
+            this._loadImg(previousSlideIndex);
+        } 
     },
+
+    _loadImg: function(index){
+         this._imgItems[index].src = this.data[index];
+    },
+
     /**
      * Function - slide to prev
      */
@@ -256,12 +286,24 @@ Polymer({
      * Function - slide to next
      */
     runSetUp: function() {
+        if (this.data.length <= 0) {
+            return;
+        }
+        for (var i = 0; i < this.data.length; i++) {
+            var imageComp = document.createElement('t-image');
+            imageComp.sizing = this.sizing;
+            imageComp.width = this.width;
+            imageComp.height = this.height;
+            Polymer.dom(this.$.carousel).appendChild(imageComp);
+        }
+
         var comp = this;
+
         setTimeout(function() {
-            comp.$.carousel.mySwipe.setup();
-            comp.$.carousel.totalSlides = comp.$.carousel.mySwipe.getNumSlides();
-            comp.$.carousel.checkDistributedNodes();
-        }, 100);
+            comp.$.carousel.setUpCarousel();
+            comp._setSrc()
+        }, 10);
+        //comp.$.carousel.checkDistributedNodes();
     },
 
     /**

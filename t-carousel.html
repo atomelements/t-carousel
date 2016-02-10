@@ -88,7 +88,7 @@
 	
 	<div id="mySwipe" class="swipe" >
       <div class="layout horizontal swipe-wrap" on-click='_checkLightBox'>
-      	<content id="something" select="*"></content>
+      	<content id="contentTag" select="*"></content>
       </div>
     </div>
     <template is="dom-if" if="{{checkDistributedNodes(totalSlides)}}">
@@ -163,7 +163,7 @@
 	         */
             continuous: {
                 type: Boolean,
-                value: true
+                value: false
             },
 
             /**
@@ -218,38 +218,11 @@
         },
 
         checkDistributedNodes: function(totalSlides){
-            return Polymer.dom(this.$.something).getDistributedNodes().length > 1;
+            return Polymer.dom(this.$.contentTag).getDistributedNodes().length > 1;
         },
 
         attached: function () {
-            console.log();
-            var component = this;
-            this.selected = this.startSlide;
-            this.mySwipe = new Swipe(component.$.mySwipe, {
-                startSlide: this.startSlide,
-                speed: this.speed,
-                auto: this.auto,
-                continuous: this.continuous,
-                disableScroll: this.disableScroll,
-                stopPropagation: this.stopPropagation,
-                callback: function (index, elem) {
-
-                    /**
-                     * Function - runs at slide change.
-                     */
-                    component.fire('slide-change', 'index', 'elem');
-                    component._setSelected();
-                },
-                transitionEnd: function (index, elem) {
-
-                    /**
-                     * Function - runs at the end slide transition.
-                     */
-                    component.fire('slide-finish', 'index', 'elem');
-                }
-            });
-
-            this.totalSlides = this.mySwipe.getNumSlides();
+            this.setUpCarousel();
         },
 
         _checkLightBox:function(){
@@ -266,6 +239,40 @@
         _setSelected: function () {
             this.selected = this.mySwipe.getPos();
         },
+
+        /**
+         * Function - Setup carousel
+         */
+        setUpCarousel:function(){
+            var component = this;
+            this.selected = this.startSlide;
+            this.mySwipe = new Swipe(component.$.mySwipe, {
+                startSlide: this.startSlide,
+                speed: this.speed,
+                auto: this.auto,
+                continuous: this.continuous,
+                disableScroll: this.disableScroll,
+                stopPropagation: this.stopPropagation,
+                callback: function (index, elem) {
+
+                    /**
+                     * Function - runs at slide change.
+                     */
+                    component.fire('slide-change', index, elem);
+                    component._setSelected();
+                },
+                transitionEnd: function (index, elem) {
+
+                    /**
+                     * Function - runs at the end slide transition.
+                     */
+                    component.fire('slide-finish', index, elem);
+                }
+            });
+
+            this.totalSlides = this.mySwipe.getNumSlides();
+        },
+
         /**
          * Function - slide to prev
          */
