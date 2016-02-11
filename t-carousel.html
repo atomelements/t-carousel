@@ -133,9 +133,9 @@
             },
 
             /**
-	         * Integer - begin with auto slideshow (time in milliseconds between slides)
+	         * Integer - slide show interval time & should be grater than zero (time in milliseconds between slides)
 	         */
-            auto: {
+            autoSlideInterval: {
                 type: Number,
                 value: 10000
             },
@@ -214,6 +214,14 @@
             totalSlides: {
                 type: Number,
                 notify: true
+            },
+
+            /*
+                If true, will setup carousel on element attached event
+             */
+            autoSetupCarousel: {
+                type: Boolean,
+                value: false
             }
         },
 
@@ -222,7 +230,9 @@
         },
 
         attached: function () {
-            this.setUpCarousel();
+            if(this.autoSetupCarousel){
+                this.setUpCarousel();
+            }
         },
 
         _checkLightBox:function(){
@@ -249,7 +259,7 @@
             this.mySwipe = new Swipe(component.$.mySwipe, {
                 startSlide: this.startSlide,
                 speed: this.speed,
-                auto: this.auto,
+                auto: this.autoSlideInterval,
                 continuous: this.continuous,
                 disableScroll: this.disableScroll,
                 stopPropagation: this.stopPropagation,

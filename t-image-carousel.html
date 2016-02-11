@@ -52,7 +52,7 @@
             transform: translateY(-50%);
         }
         </style>
-        <t-carousel id="carousel" my-swipe="{{carousel}}" start-slide="{{startSlide}}" speed="{{speed}}" auto="{{auto}}" continuous="{{continuous}}" disable-scroll="{{disableScroll}}" no-arrow="{{noArrow}}" stop-propagation="{{stopPropagation}}" selected="{{selected}}" light-box="{{lightBox}}" zoomed="{{zoomed}}">
+        <t-carousel id="carousel" my-swipe="{{carousel}}" start-slide="{{startSlide}}" speed="{{speed}}" auto-slide-interval="{{autoSlideInterval}}" continuous="{{continuous}}" disable-scroll="{{disableScroll}}" no-arrow="{{noArrow}}" stop-propagation="{{stopPropagation}}" selected="{{selected}}" light-box="{{lightBox}}" zoomed="{{zoomed}}">
             <!-- <template is="dom-repeat" items="[[data]]">
                <t-image src="{{item}}" sizing="{{sizing}}" width="{{width}}" loaded="{{imgLoaded}}" height="{{height}}">
                    <template is="dom-if" if="[[!imgLoaded]]">
@@ -146,9 +146,9 @@ Polymer({
         },
 
         /**
-         * Integer - begin with auto slideshow (time in milliseconds between slides)
+         * Integer - slide show interval time & should be grater than zero (time in milliseconds between slides)
          */
-        auto: {
+        autoSlideInterval: {
             type: Number,
             value: 10000
         },
