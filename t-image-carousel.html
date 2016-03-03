@@ -8,25 +8,16 @@
             display: block;
             position: relative;
         }
-        /* t-image,
-        #backPage {
-            background-color: #000;
-        } */
-        
         #backoverlay {
             display: none;
         }
         
         :host[zoomed] #backoverlay {
             display: block;
-            z-index: 97;
+            z-index: -1;
             background: rgba(0, 0, 0, 0.8);
         }
-        
-        #backPage {
-            z-index: -1;
-        }
-        
+
         :host[zoomed] {
             position: fixed;
             top: 0;
@@ -37,19 +28,8 @@
         }
         
         :host[zoomed] t-carousel,
-        :host[zoomed] t-carousel::content #backoverlay {
-            background: transparent;
-        }
-        
-        :host[zoomed] #backPage {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            z-index: 98;
-            -webkit-transform: translateY(-50%);
-            -ms-transform: translateY(-50%);
-            -o-transform: translateY(-50%);
-            transform: translateY(-50%);
+        ::content #backoverlay {
+            background: transparent!important;
         }
         </style>
         <t-carousel id="carousel" my-swipe="{{carousel}}" start-slide="{{startSlide}}" speed="{{speed}}" auto-slide-interval="{{autoSlideInterval}}" continuous="{{continuous}}" disable-scroll="{{disableScroll}}" no-arrow="{{noArrow}}" stop-propagation="{{stopPropagation}}" selected="{{selected}}" light-box="{{lightBox}}" zoomed="{{zoomed}}">
