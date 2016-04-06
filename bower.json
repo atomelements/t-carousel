@@ -1,6 +1,6 @@
 {
   "name": "t-carousel",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "authors": [
     "Sounak <talk2sounak@gmail.com>"
   ],
@@ -21,7 +21,7 @@
     "test",
     "tests"
   ],
-  "dependencies": { 
+  "dependencies": {
     "polymer": "Polymer/polymer#^1.0.0",
     "t-image": "atomelements/t-image#0.0.0",
     "t-button": "atomelements/t-button#0.0.0"
