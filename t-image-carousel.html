@@ -67,7 +67,14 @@ Polymer({
             reflectToAttribute: true,
             value: "cover"
         },
-
+ /**
+         * Set the icon when there is not img or when theres error loading image
+         * @attribute sizing
+         * @type string
+         * @default null
+         */
+        loadingIcon: String,
+       
         carousel: {
             type: Object,
             value: function() {
@@ -265,6 +272,9 @@ Polymer({
             imageComp.sizing = this.sizing;
             imageComp.width = this.width;
             imageComp.height = this.height;
+            if(this.loadingIcon){
+                imageComp.loadingIcon = this.loadingIcon;
+            }
             Polymer.dom(this.$.carousel).appendChild(imageComp);
         }
 
