@@ -23,8 +23,8 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.0.0",
-    "t-image": "atomelements/t-image#0.0.0",
-    "t-button": "atomelements/t-button#0.0.0"
+    "t-image": "atomelements/t-image#^1.0.0",
+    "t-button": "atomelements/t-button#^1.0.0"
   },
   "devDependencies": {
     "web-component-tester": "*",
