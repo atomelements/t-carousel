@@ -264,7 +264,7 @@ Polymer({
      * Function - slide to next
      */
     runSetUp: function() {
-        if (this.data.length <= 0) {
+        if (!this.data || !this.data.length) {
             return;
         }
         for (var i = 0; i < this.data.length; i++) {
