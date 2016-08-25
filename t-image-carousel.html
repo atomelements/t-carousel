@@ -267,6 +267,7 @@ Polymer({
         if (!this.data || !this.data.length) {
             return;
         }
+        Polymer.dom(this.$.carousel).innerHTML = "";
         for (var i = 0; i < this.data.length; i++) {
             var imageComp = document.createElement('t-image');
             imageComp.sizing = this.sizing;
